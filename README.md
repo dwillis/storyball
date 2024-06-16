@@ -13,7 +13,136 @@ GitHub hosts lots of public repositories filled with various sports data. There 
 
 ## Where to Find Data for Use in R
 
-#### sportsdataverse
+# Using packages to get data
 
-sportsdataverse is a set of R packages that provide access to data from multiple professional sports (and a few college ones).
+There is a growing number of packages and repositories of sports data, largely because there's a growing number of people who want to analyze that data. But with these packages, someone has done the work of gathering the data for you. All you have to learn are the commands to get it.
 
+One very promising collection of libraries is something called the [SportsDataverse](https://sportsdataverse.org/), which has a collection of packages covering specific sports, all of which are in various stages of development. Some are more complete than others, but they are all being actively worked on by developers. Packages of interest in this class are:
+
+-   [cfbfastR, for college football](https://cfbfastr.sportsdataverse.org/).
+-   [hoopR, for men's professional and college basketball](https://hoopr.sportsdataverse.org/).
+-   [wehoop, for women's professional and college basketball](https://wehoop.sportsdataverse.org/).
+-   [baseballr, for professional and college baseball](https://billpetti.github.io/baseballr/).
+-   [worldfootballR, for soccer data from around the world](https://jaseziv.github.io/worldfootballR/).
+-   [hockeyR, for NHL hockey data](https://hockeyr.netlify.app/)
+-   [recruitR, for college sports recruiting](https://recruitr.sportsdataverse.org/)
+
+Not part of the SportsDataverse, but in the same neighborhood, is [nflfastR](https://www.nflfastr.com/), which can provide NFL play-by-play data.
+
+Because they're all under development, not all of them can be installed with just a simple `install.packages("something")`. Some require a little work, some require API keys.
+
+The main issue for you is to read the documentation carefully.
+
+## Using cfbfastR as a cautionary tale
+
+cfbfastR presents us a good view into the promise and peril of libraries like this.
+
+[First, to make this work, follow the installation instructions](https://cfbfastr.sportsdataverse.org/) and then follow how to get an API key from College Football Data and how to add that to your environment. But maybe wait to do that until you read the whole section.
+
+After installations, we can load it up.
+
+```{r}
+#| message: false
+#| warning: false
+library(tidyverse)
+library(cfbfastR)
+```
+
+You might be thinking, "Oh wow, I can get play by play data for college football. Let's look at what are the five most heartbreaking plays of last year's Maryland season." Because what better way to determine doom than by looking at the steepest drop-off in win probability, which is included in the data.
+
+Great idea. Let's do it. You'll need to make sure that your API key has been added to your environment.
+
+The first thing to do is [read the documentation](https://cfbfastr.sportsdataverse.org/). You'll see that you can request data for each week. For example, here's week 1.
+
+```{r}
+maryland <- cfbd_pbp_data(
+ 2023,
+  week=1, 
+  season_type = "regular",
+  team = "Maryland",
+  epa_wpa = TRUE,
+)
+```
+
+There's not an easy way to get all of a single team's games. A way to do it that's not very pretty but it works is like this:
+
+```{r}
+#| message: false
+#| warning: false
+wk1 <- cfbd_pbp_data(2022, week=1, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+Sys.sleep(2)
+wk2 <- cfbd_pbp_data(2022, week=2, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+Sys.sleep(2)
+wk3 <- cfbd_pbp_data(2022, week=3, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+Sys.sleep(2)
+wk4 <- cfbd_pbp_data(2022, week=4, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+Sys.sleep(2)
+wk5 <- cfbd_pbp_data(2022, week=5, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+Sys.sleep(2)
+wk6 <- cfbd_pbp_data(2022, week=6, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+Sys.sleep(2)
+wk8 <- cfbd_pbp_data(2022, week=8, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+Sys.sleep(2)
+wk9 <- cfbd_pbp_data(2022, week=9, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+Sys.sleep(2)
+wk10 <- cfbd_pbp_data(2022, week=10, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+Sys.sleep(2)
+wk11 <- cfbd_pbp_data(2022, week=11, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+Sys.sleep(2)
+wk12 <- cfbd_pbp_data(2022, week=12, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+
+umplays <- bind_rows(wk1, wk2, wk3, wk4, wk5, wk6, wk8, wk9, wk10, wk11, wk12)
+```
+
+The sys.sleep bits just pauses for two seconds before running the next block. Since we're requesting data from someone else's computer, we want to be kind. Week 2 was a bye week for Maryland, so if you request it, you'll get an empty request and a warning. The `bind_rows` parts puts all the dataframes into a single dataframe.
+
+Now you're ready to look at heartbreak. How do we define heartbreak? How about like this: you first have to lose the game, it comes in the third or fourth quarter, it involves a play (i.e. not a timeout), and it results in the biggest drop in win probability.
+
+```{r}
+umplays |> 
+  filter(pos_team == "Maryland" & wk > 4 & play_type != "Timeout") |> 
+  filter(period == 3 | period == 4) |> 
+  mutate(HeartbreakLevel = wp_before - wp_after) |> 
+  arrange(desc(HeartbreakLevel)) |> 
+  top_n(5, wt=HeartbreakLevel) |>
+  select(period, clock.minutes, def_pos_team, play_type, play_text)
+```
+
+The most heartbreaking play of the season, according to our data? A third quarter run for two yards against Northwestern. Hmm - Maryland won that game, though. The other top plays - mostly against Purdue and a blocked punt by Ohio State - seem more in line with what we want.
+
+## Another example
+
+The wehoop package is mature enough to have a version on CRAN, so you can install it the usual way with `install.packages("wehoop")`. Another helpful library to install is progressr with `install.packages("progressr")`
+
+```{r}
+library(wehoop)
+```
+
+Many of these libraries have more than play-by-play data. For example, wehoop has box scores and player data for both the WNBA and college basketball. From personal experience, WNBA data isn't hard to get, but women's college basketball is a giant pain.
+
+So, who is Maryland's single season points champion over the last six seasons?
+
+```{r}
+progressr::with_progress({
+  wbb_player_box <- wehoop::load_wbb_player_box(2018:2022)
+})
+```
+
+With progressr, you'll see a progress bar in the console, which lets you know that your command is still working, since some of these requests take minutes to complete. Player box scores is quicker -- five seasons was a matter of seconds.
+
+If you look at the wbb_player_box data we now have, we have each player in each game over each season -- more than 300,000 records. Finding out who Maryland's top 10 single-season scoring leaders are is a matter of grouping, summing and filtering.
+
+```{r}
+#| message: false
+#| warning: false
+wbb_player_box |> 
+  filter(team_short_display_name == "Maryland", !is.na(points)) |> 
+  group_by(athlete_display_name, season) |> 
+  summarise(totalPoints = sum(as.numeric(points))) |> 
+  arrange(desc(totalPoints)) |>
+  ungroup() |>
+  top_n(10, wt=totalPoints)
+  
+```
+
+Maryland relied on Diamond Miller's scoring last year more than they have any player's in the past six seasons.
