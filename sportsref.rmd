@@ -21,7 +21,7 @@ Step 4: Paste it into your plain text file in R Studio and fix your headers. Rem
 
 ![](images/csv5.png){fig-alt="A view of data pasted in Atom with the first row highlighted." width="100%"}
 
-Step 6: Save your text file as whatever you want to name it DOT csv and put it where you've got your project data.
+Step 6: Save your text file as whatever you want to name it DOT csv and put it in this directory.
 
 ![](images/csv6.png){width="100%"}
 
