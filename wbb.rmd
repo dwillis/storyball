@@ -2,7 +2,7 @@
 ## IRE 2024 Conference
 #### Derek Willis, University of Maryland
 
-Some of the best sports data stories start with a good question. How about this one: which teams benefit the most from home-court officiating?
+Some of the best sports data stories start with a good question. How about this one: which women's college basketball teams benefit the most from home-court officiating?
 
 First, we'll load the tidyverse.
 
