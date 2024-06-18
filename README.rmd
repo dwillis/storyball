@@ -40,9 +40,9 @@ The main issue for you is to read the documentation carefully.
 
 cfbfastR presents us a good view into the promise and peril of libraries like this.
 
-[First, to make this work, follow the installation instructions](https://cfbfastr.sportsdataverse.org/) and then follow how to get an API key from College Football Data. Replace YOUR-API-KEY-HERE with your key.
+[First, to make this work, follow the installation instructions](https://cfbfastr.sportsdataverse.org/) and then follow how to get an API key from College Football Data. You'll make a repository secret in your repository's settings, under Codespaces, to store your API key called `CFBD_API_KEY`.
 
-After installations, we can load it up.
+After that, we can load it up.
 
 ```{r}
 #| message: false
