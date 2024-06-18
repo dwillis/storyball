@@ -5,11 +5,14 @@ A hands-on session on finding sports data at IRE 2024
 
 #### GitHub
 
-GitHub hosts lots of public repositories filled with various sports data. There are collections of data mostly scraped from other websites. For example:
+GitHub and other data repositories hosts lots of public collections filled with various sports data. There are collections of data mostly scraped from other websites. For example:
 
 * [College Rosters](https://github.com/Sports-Roster-Data/) (WBB and Volleyball)
 * [MLS Soccer Rosters](https://utdata.github.io/mls-roster-profiles/)
-* 
+* [English Women's Football Database](https://github.com/probjects/ewf-database)
+* [Match Score Dataset for Team Ball Sports](https://data.mendeley.com/datasets/2pt4vmyf27/2)
+* [First Class Cricket Matches](https://github.com/outside-edge/fairly_random)
+* [NCAA Women's Volleyball Data](https://github.com/dwillis/NCAAWomensVolleyballData)
 
 ## Where to Find Data for Use in R
 
@@ -37,7 +40,7 @@ The main issue for you is to read the documentation carefully.
 
 cfbfastR presents us a good view into the promise and peril of libraries like this.
 
-[First, to make this work, follow the installation instructions](https://cfbfastr.sportsdataverse.org/) and then follow how to get an API key from College Football Data and how to add that to your environment. But maybe wait to do that until you read the whole section.
+[First, to make this work, follow the installation instructions](https://cfbfastr.sportsdataverse.org/) and then follow how to get an API key from College Football Data. Replace YOUR-API-KEY-HERE with your key.
 
 After installations, we can load it up.
 
@@ -46,7 +49,9 @@ After installations, we can load it up.
 #| warning: false
 library(tidyverse)
 library(cfbfastR)
+Sys.setenv(CFBD_API_KEY = Sys.getenv("CFBD_API_KEY"))
 ```
+
 
 You might be thinking, "Oh wow, I can get play by play data for college football. Let's look at what are the five most heartbreaking plays of last year's Maryland season." Because what better way to determine doom than by looking at the steepest drop-off in win probability, which is included in the data.
 
@@ -69,27 +74,27 @@ There's not an easy way to get all of a single team's games. A way to do it that
 ```{r}
 #| message: false
 #| warning: false
-wk1 <- cfbd_pbp_data(2022, week=1, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+wk1 <- cfbd_pbp_data(2023, week=1, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
 Sys.sleep(2)
-wk2 <- cfbd_pbp_data(2022, week=2, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+wk2 <- cfbd_pbp_data(2023, week=2, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
 Sys.sleep(2)
-wk3 <- cfbd_pbp_data(2022, week=3, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+wk3 <- cfbd_pbp_data(2023, week=3, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
 Sys.sleep(2)
-wk4 <- cfbd_pbp_data(2022, week=4, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+wk4 <- cfbd_pbp_data(2023, week=4, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
 Sys.sleep(2)
-wk5 <- cfbd_pbp_data(2022, week=5, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+wk5 <- cfbd_pbp_data(2023, week=5, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
 Sys.sleep(2)
-wk6 <- cfbd_pbp_data(2022, week=6, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+wk6 <- cfbd_pbp_data(2023, week=6, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
 Sys.sleep(2)
-wk8 <- cfbd_pbp_data(2022, week=8, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+wk8 <- cfbd_pbp_data(2023, week=7, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
 Sys.sleep(2)
-wk9 <- cfbd_pbp_data(2022, week=9, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+wk9 <- cfbd_pbp_data(2023, week=9, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
 Sys.sleep(2)
-wk10 <- cfbd_pbp_data(2022, week=10, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+wk10 <- cfbd_pbp_data(2023, week=10, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
 Sys.sleep(2)
-wk11 <- cfbd_pbp_data(2022, week=11, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+wk11 <- cfbd_pbp_data(2023, week=11, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
 Sys.sleep(2)
-wk12 <- cfbd_pbp_data(2022, week=12, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
+wk12 <- cfbd_pbp_data(2023, week=12, season_type = "regular", team = "Maryland", epa_wpa = TRUE)
 
 umplays <- bind_rows(wk1, wk2, wk3, wk4, wk5, wk6, wk8, wk9, wk10, wk11, wk12)
 ```
