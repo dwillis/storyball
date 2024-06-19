@@ -2,8 +2,6 @@
 ## IRE 2024 Conference
 #### Derek Willis, University of Maryland
 
-TODO: update 2023-24 logs
-
 Some of the best sports data stories start with a good question. How about this one: which women's college basketball teams benefit the most from home-court officiating?
 
 First, we'll load the tidyverse.
@@ -101,10 +99,14 @@ conference_fouldiff_location <- logs |>
 ### How many teams have averaged fewer fouls at home and away over the past seven seasons?
 
 ```{r}
-team_fouldiff_location_season |> filter(Home < 0, Away < 0) |> group_by(Team) |> summarize(count = n()) |> arrange(desc(count))
+team_fouldiff_location_season |> 
+  filter(Home < 0, Away < 0) |> 
+  group_by(Team) |> 
+  summarize(count = n()) |> 
+  arrange(desc(count))
 ```
 
-### Teams that are good at this - are they alike? Yes, except South Carolina and Western Illinois.
+### Teams that are good at this - are they alike? Yes, except South Carolina, NC State and Western Illinois.
 
 ```{r}
 team_fouldiff_location |> 
@@ -113,8 +115,18 @@ team_fouldiff_location |>
   arrange(Diff)
 ```
 
+What about West Virginia? Let's check [the graphic from Her Hoop Stats](https://herhoopstats.substack.com/p/for-wvu-theres-no-place-like-home).
+
+Ok, that's kind of weird.
+
 ### Drilling down into game-level data for West Virginia
 
+This excludes neutral court games.
+
 ```{r}
-logs |> filter(Team == "West Virginia", !is.na(W_L), is.na(HomeAway)) |>  select(Season, Date, Opponent, W_L, foul_diff, steal_diff, turnover_diff) |>  arrange(desc(Date)) |> distinct()
+logs |> 
+  filter(Team == "West Virginia", !is.na(W_L), is.na(HomeAway)) |>  
+  select(Season, Date, Opponent, W_L, foul_diff, steal_diff, turnover_diff) |>  
+  arrange(desc(Date)) |> 
+  distinct()
 ```
