@@ -1,5 +1,18 @@
 # Storyball
-A hands-on session on finding sports data at IRE 2024
+### A hands-on session on finding sports data
+### IRE 2024 Conference
+### Derek Willis, University of Maryland
+### thescoop.org/storyball
+
+## Getting Started
+
+You need to have a GitHub account to take full advantage of what we're doing here, including being able to walk through some data analysis. You can skip that and just watch, too, but if you want try it yourself, sign into your [GitHub](https://github.com/) account (don't have one, it's free to create one).
+
+If you've done that, go to [this repository](https://github.com/dwillis/storyball) and click on the green "Use this template" button and then choose "Open in a codespace":
+
+![Let's go](images/getting_started.png)
+
+It'll take some time to get things setup, but keep that tab open and we'll cover some other stuff first.
 
 ## Where to Find Raw Data
 
@@ -7,14 +20,18 @@ A hands-on session on finding sports data at IRE 2024
 
 GitHub and other data repositories hosts lots of public collections filled with various sports data. There are collections of data mostly scraped from other websites. For example:
 
-* [College Rosters](https://github.com/Sports-Roster-Data/) (WBB and Volleyball)
-* [MLS Soccer Rosters](https://utdata.github.io/mls-roster-profiles/)
-* [English Women's Football Database](https://github.com/probjects/ewf-database)
-* [Match Score Dataset for Team Ball Sports](https://data.mendeley.com/datasets/2pt4vmyf27/2)
-* [First Class Cricket Matches](https://github.com/outside-edge/fairly_random)
-* [NCAA Women's Volleyball Data](https://github.com/dwillis/NCAAWomensVolleyballData)
+-   [College Rosters](https://github.com/Sports-Roster-Data/) (WBB and Volleyball)
+-   [MLS Soccer Rosters](https://utdata.github.io/mls-roster-profiles/)
+-   [English Women's Football Database](https://github.com/probjects/ewf-database)
+-   [Match Score Dataset for Team Ball Sports](https://data.mendeley.com/datasets/2pt4vmyf27/2)
+-   [First Class Cricket Matches](https://github.com/outside-edge/fairly_random)
+-   [NCAA Women's Volleyball Data](https://github.com/dwillis/NCAAWomensVolleyballData)
 
 ## Where to Find Data for Use in R
+
+### Sports Reference
+
+The constellation of Sports Reference sites cover lots of sports, and they provide interesting and useful tables that you can turn into CSV files. [Here's one way to do that](sportsref.rmd).
 
 # Using packages to get data
 
@@ -30,11 +47,11 @@ One very promising collection of libraries is something called the [SportsDatave
 -   [hockeyR, for NHL hockey data](https://hockeyr.netlify.app/)
 -   [recruitR, for college sports recruiting](https://recruitr.sportsdataverse.org/)
 
-Not part of the SportsDataverse, but in the same neighborhood, is [nflfastR](https://www.nflfastr.com/), which can provide NFL play-by-play data.
+Not part of the SportsDataverse, but in the same neighborhood, is [nflfastR](https://www.nflfastr.com/), which can provide NFL play-by-play data. There also are a growing number of Python libraries.
 
 Because they're all under development, not all of them can be installed with just a simple `install.packages("something")`. Some require a little work, some require API keys.
 
-The main issue for you is to read the documentation carefully.
+The main issue for you is to read the documentation carefully. Because many of them are focused on play-by-play data, they might not work for your purposes depending on what you want to do. This is especially true of the baseballR package.
 
 ## Using cfbfastR as a cautionary tale
 
@@ -49,9 +66,8 @@ After that, we can load it up.
 #| warning: false
 library(tidyverse)
 library(cfbfastR)
-Sys.setenv(CFBD_API_KEY = Sys.getenv("CFBD_API_KEY"))
+Sys.setenv(CFBD_API_KEY = "QzxJpsLVmi7nAJXEBRxmgIcD0CtcMsS+1IQHAc2HwwQtW1lyXICPImPKGQvmCjL3")
 ```
-
 
 You might be thinking, "Oh wow, I can get play by play data for college football. Let's look at what are the five most heartbreaking plays of last year's Maryland season." Because what better way to determine doom than by looking at the steepest drop-off in win probability, which is included in the data.
 
@@ -125,11 +141,11 @@ library(wehoop)
 
 Many of these libraries have more than play-by-play data. For example, wehoop has box scores and player data for both the WNBA and college basketball. From personal experience, WNBA data isn't hard to get, but women's college basketball is a giant pain.
 
-So, who is Maryland's single season points champion over the last six seasons?
+So, who is Maryland's single season points champion over the last seven seasons?
 
 ```{r}
 progressr::with_progress({
-  wbb_player_box <- wehoop::load_wbb_player_box(2018:2022)
+  wbb_player_box <- wehoop::load_wbb_player_box(2018:2023)
 })
 ```
 
@@ -150,4 +166,4 @@ wbb_player_box |>
   
 ```
 
-Maryland relied on Diamond Miller's scoring last year more than they have any player's in the past six seasons.
+Maryland relied on Diamond Miller's scoring in 2022-23 more than they have any player's in the past seven seasons.
