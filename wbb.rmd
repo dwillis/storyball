@@ -2,6 +2,8 @@
 ## IRE 2024 Conference
 #### Derek Willis, University of Maryland
 
+TODO: update 2023-24 logs
+
 Some of the best sports data stories start with a good question. How about this one: which women's college basketball teams benefit the most from home-court officiating?
 
 First, we'll load the tidyverse.
@@ -10,7 +12,7 @@ First, we'll load the tidyverse.
 library(tidyverse)
 ```
 
-Our data is game-level records from the 2017-18 season through last week. After loading it, we'll want to add columns to measure the foul differential between the two teams, and I'll through in steal differential, too, since that's often associated with aggressive defense.
+Our data is game-level records from the 2017-18 season through 2023-24 season. After loading it, we'll want to add columns to measure the foul differential between the two teams, and I'll through in steal differential, too, since that's often associated with aggressive defense.
 
 ```{r}
 logs <- read_csv("logs1824.csv")
