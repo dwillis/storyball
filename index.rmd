@@ -39,6 +39,18 @@ There's a [whole GitHub Topic](https://github.com/topics/sports-data) on this th
 
 The constellation of [Sports Reference sites](https://www.sports-reference.com/) cover lots of sports, and they provide interesting and useful tables that you can turn into CSV files. [Here's one way to do that](sportsref.rmd).
 
+## Back to Your Codespace
+
+Your codespace should be ready to go by now. In the lower part of the screen, click on the "Ports" tab and then on the global icon for port 8787 by hovering over the "Forwarded Address" value as shown:
+
+![RStudio](images/rstudio.png)
+
+You'll get a sign-in page: the username and password are both rstudio:
+
+![Login](images/rstudio_login.png)
+
+When RStudio is up and running, you can click on the storyball folder on the lower right and then on the  `index.rmd` file and follow along!
+
 # Using packages to get data
 
 There is a growing number of packages and repositories of sports data, largely because there's a growing number of people who want to analyze that data. But with these packages, someone has done the work of gathering the data for you. All you have to learn are the commands to get it.
@@ -67,23 +79,17 @@ I'm glad you asked. I love women's basketball, and occasionally write about it f
 
 cfbfastR presents us a good view into the promise and peril of libraries like this.
 
-[First, to make this work, follow the installation instructions](https://cfbfastr.sportsdataverse.org/) and then follow how to get an API key from College Football Data. You'll make a repository secret in your repository's settings, under Codespaces, to store your API key called `CFBD_API_KEY`.
-
-After that, we can load it up.
+You can install it with `install.packages("cfbfastR")` and then [get an API key from College Football Data](https://collegefootballdata.com/key). Once your key is emailed to you, you'll need to make sure that your API key has been added to your environment.
 
 ```{r}
 #| message: false
 #| warning: false
 library(tidyverse)
 library(cfbfastR)
-Sys.setenv(CFBD_API_KEY = "QzxJpsLVmi7nAJXEBRxmgIcD0CtcMsS+1IQHAc2HwwQtW1lyXICPImPKGQvmCjL3")
+Sys.setenv(CFBD_API_KEY = "YOUR API KEY HERE")
 ```
 
-You might be thinking, "Oh wow, I can get play by play data for college football. Let's look at what are the five most heartbreaking plays of last year's Maryland season." Because what better way to determine doom than by looking at the steepest drop-off in win probability, which is included in the data.
-
-Great idea. Let's do it. You'll need to make sure that your API key has been added to your environment.
-
-The first thing to do is [read the documentation](https://cfbfastr.sportsdataverse.org/). You'll see that you can request data for each week. For example, here's week 1.
+The first thing to do is [read the documentation](https://cfbfastr.sportsdataverse.org/). You'll see that you can request data for each week. For example, here's week 1 for Maryland last season:
 
 ```{r}
 maryland <- cfbd_pbp_data(
@@ -95,7 +101,9 @@ maryland <- cfbd_pbp_data(
 )
 ```
 
-There's not an easy way to get all of a single team's games. A way to do it that's not very pretty but it works is like this:
+Let's take a look at that `maryland` dataframe to see what kind of information we get. Click on it on the right. There are 370 columns! They include the basic information you'd expect like down, distance and play, but also Expected Points Added and Win Probability for each play. The library offers [several tutorials](https://cfbfastr.sportsdataverse.org/articles/index.html).
+
+There's not an easy way to get all of a single team's games. A way to do it that's not very pretty but it works is like this. I wouldn't run this unless you want to be waiting a bit.
 
 ```{r}
 #| message: false
@@ -125,21 +133,7 @@ wk12 <- cfbd_pbp_data(2023, week=12, season_type = "regular", team = "Maryland",
 umplays <- bind_rows(wk1, wk2, wk3, wk4, wk5, wk6, wk8, wk9, wk10, wk11, wk12)
 ```
 
-The sys.sleep bits just pauses for two seconds before running the next block. Since we're requesting data from someone else's computer, we want to be kind. Week 2 was a bye week for Maryland, so if you request it, you'll get an empty request and a warning. The `bind_rows` parts puts all the dataframes into a single dataframe.
-
-Now you're ready to look at heartbreak. How do we define heartbreak? How about like this: you first have to lose the game, it comes in the third or fourth quarter, it involves a play (i.e. not a timeout), and it results in the biggest drop in win probability.
-
-```{r}
-umplays |> 
-  filter(pos_team == "Maryland" & wk > 4 & play_type != "Timeout") |> 
-  filter(period == 3 | period == 4) |> 
-  mutate(HeartbreakLevel = wp_before - wp_after) |> 
-  arrange(desc(HeartbreakLevel)) |> 
-  top_n(5, wt=HeartbreakLevel) |>
-  select(period, clock.minutes, def_pos_team, play_type, play_text)
-```
-
-The most heartbreaking play of the season, according to our data? A third quarter run for two yards against Northwestern. Hmm - Maryland won that game, though. The other top plays - mostly against Purdue and a blocked punt by Ohio State - seem more in line with what we want.
+The sys.sleep bits just pauses for two seconds before running the next block. Since we're requesting data from someone else's computer, we want to be kind. Week 8 was a bye week for Maryland, so if you request it, you'll get an empty request and a warning. The `bind_rows` parts puts all the dataframes into a single dataframe.
 
 ## Another example
 
@@ -155,7 +149,7 @@ So, who is Maryland's single season points champion over the last seven seasons?
 
 ```{r}
 progressr::with_progress({
-  wbb_player_box <- wehoop::load_wbb_player_box(2018:2023)
+  wbb_player_box <- wehoop::load_wbb_player_box(2018:2024)
 })
 ```
 
