@@ -81,12 +81,14 @@ cfbfastR presents us a good view into the promise and peril of libraries like th
 
 You can install it with `install.packages("cfbfastR")` and then [get an API key from College Football Data](https://collegefootballdata.com/key). Once your key is emailed to you, you'll need to make sure that your API key has been added to your environment.
 
+If you don't want to do that, I've got a key here: https://go.umd.edu/ire-cfb. Put it in the quotes below.
+
 ```{r}
 #| message: false
 #| warning: false
 library(tidyverse)
 library(cfbfastR)
-Sys.setenv(CFBD_API_KEY = "YOUR API KEY HERE")
+Sys.setenv(CFBD_API_KEY = "QzxJpsLVmi7nAJXEBRxmgIcD0CtcMsS+1IQHAc2HwwQtW1lyXICPImPKGQvmCjL3")
 ```
 
 The first thing to do is [read the documentation](https://cfbfastr.sportsdataverse.org/). You'll see that you can request data for each week. For example, here's week 1 for Maryland last season:

@@ -497,9 +497,11 @@ libraries like this.</p>
 then <a href="https://collegefootballdata.com/key">get an API key from
 College Football Data</a>. Once your key is emailed to you, you’ll need
 to make sure that your API key has been added to your environment.</p>
+<p>If you don’t want to do that, I’ve got a key here: <a href="https://go.umd.edu/ire-cfb" class="uri">https://go.umd.edu/ire-cfb</a>. Put it in the quotes
+below.</p>
 <pre class="r"><code>library(tidyverse)
 library(cfbfastR)
-Sys.setenv(CFBD_API_KEY = &quot;YOUR API KEY HERE&quot;)</code></pre>
+Sys.setenv(CFBD_API_KEY = &quot;YOUR API KEY&quot;)</code></pre>
 <p>The first thing to do is <a href="https://cfbfastr.sportsdataverse.org/">read the documentation</a>.
 You’ll see that you can request data for each week. For example, here’s
 week 1 for Maryland last season:</p>
@@ -510,7 +512,7 @@ week 1 for Maryland last season:</p>
   team = &quot;Maryland&quot;,
   epa_wpa = TRUE,
 )</code></pre>
-<pre><code>## • 21:24:26 | Start processing of 1 game...</code></pre>
+<pre><code>## • 13:50:59 | Start processing of 1 game...</code></pre>
 <p>Let’s take a look at that <code>maryland</code> dataframe to see what
 kind of information we get. Click on it on the right. There are 370
 columns! They include the basic information you’d expect like down,
